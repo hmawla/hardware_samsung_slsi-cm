@@ -150,16 +150,12 @@ static int gralloc_alloc_rgb(int ionfd, int w, int h, int format, int usage,
     }
 
     switch (format) {
-        case HAL_PIXEL_FORMAT_EXYNOS_ARGB_8888:
-        case HAL_PIXEL_FORMAT_RGBA_8888:
-        case HAL_PIXEL_FORMAT_RGBX_8888:
         case HAL_PIXEL_FORMAT_BGRA_8888:
             bpp = 4;
             break;
         case HAL_PIXEL_FORMAT_RGB_888:
             bpp = 3;
             break;
-        case HAL_PIXEL_FORMAT_RGB_565:
         case HAL_PIXEL_FORMAT_RAW_SENSOR:
             bpp = 2;
             break;
@@ -229,7 +225,6 @@ static int gralloc_alloc_framework_yuv(int ionfd, int w, int h, int format,
     unsigned int heap_mask = _select_heap(usage);
 
     switch (format) {
-        case HAL_PIXEL_FORMAT_YV12:
         case HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_P:
             *stride = ALIGN(w, 16);
             size = (*stride * h) + (ALIGN(*stride / 2, 16) * h) + ext_size;
@@ -276,7 +271,6 @@ static int gralloc_alloc_yuv(int ionfd, int w, int h, int format,
         ion_flags |= ION_EXYNOS_MFC_OUTPUT_MASK;
 
     switch (format) {
-        case HAL_PIXEL_FORMAT_EXYNOS_YV12_M:
         case HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_P_M:
             {
                 *stride = ALIGN(w, 32);
@@ -295,13 +289,9 @@ static int gralloc_alloc_yuv(int ionfd, int w, int h, int format,
                 planes = 2;
                 break;
             }
-        case HAL_PIXEL_FORMAT_YV12:
-        case HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_P:
         case HAL_PIXEL_FORMAT_YCrCb_420_SP:
             return gralloc_alloc_framework_yuv(ionfd, w, h, format, usage,
                                                ion_flags, hnd, stride);
-        case HAL_PIXEL_FORMAT_EXYNOS_YCrCb_420_SP_M:
-        case HAL_PIXEL_FORMAT_EXYNOS_YCrCb_420_SP_M_FULL:
         case HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_SP_M:
             {
                 luma_vstride = ALIGN(h, 16);
